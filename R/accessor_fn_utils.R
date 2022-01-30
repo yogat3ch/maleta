@@ -29,18 +29,19 @@ do_assignment <- function(funs, ns = pkgload::pkg_name()) {
 #' @param dep_dir \code{(chr)} of the directory in which dependencies to be accessed with functions is stored. _Note:_ Either `dep_dir` or `deps` must be supplied.
 #' @param deps \code{(chr)} of full filepaths for all dependencies to be accessed with functions.
 #' @param dep_update \code{(function)} dependency update from remote location function
-#'
+#' @param update_all \code{(lgl)} update all dependencies immediately.
 #' @return The accessor functions will be available in the package namespace if a `golem` package, otherwise accessor functions will be returned in a list
 #' @export
 
 
-create_accessors <- function(dep_dir = "data", deps = NULL, dep_update = dep_update_fn(fn = dep_update_dropbox)) {
+create_accessors <- function(dep_dir = "data", deps = NULL, dep_update = dep_update_fn(fn = dep_update_dropbox), update_all = TRUE) {
   if (is.null(deps))
     deps <- clean_null(UU::list.files2(dep_dir)) |>
       stringr::str_subset("\\.png^", negate = TRUE)
 
   UU::mkpath(dep_dir)
-  purrr::walk(deps, dep_update)
+  if (update_all)
+    purrr::walk(deps, dep_update)
   accessor_funs <- purrr::map(UU::list.files2(path), accessor_create)
   do_assignment(accessor_funs)
 }

@@ -7,7 +7,8 @@
 create_accessors(
   dep_dir = "data",
   deps = NULL,
-  dep_update = dep_update_fn(fn = dep_update_dropbox)
+  dep_update = dep_update_fn(fn = dep_update_dropbox),
+  update_all = TRUE
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ create_accessors(
 \item{deps}{\code{(chr)} of full filepaths for all dependencies to be accessed with functions.}
 
 \item{dep_update}{\code{(function)} dependency update from remote location function}
+
+\item{update_all}{\code{(lgl)} update all dependencies immediately.}
 }
 \value{
 The accessor functions will be available in the package namespace if a \code{golem} package, otherwise accessor functions will be returned in a list

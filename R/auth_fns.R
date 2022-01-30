@@ -3,9 +3,9 @@
 #' @param db_token \code{(character)} path to Dropbox token saved as RDS
 #' @export
 
-db_auth <- function(db_token = file.path("inst","vault","db_token.rds")) {
+db_auth <- function(db_token = file.path(pkgload::pkg_path(), "inst","vault","db_token.rds")) {
   if (!file.exists(db_token) && interactive()) {
-    token <- rdrop2::drop_auth(key = Sys.getenv("db_key"), secret = Sys.getenv("db_secret"), cache = FALSE)
+    token <- rdrop2::drop_auth(key = Sys.getenv("DROPBOX_KEY"), secret = Sys.getenv("DROPBOX_SECRET"), cache = FALSE)
     UU::mkpath(dirname(db_token))
     saveRDS(token, db_token)
   } else if (file.exists(db_token)) {

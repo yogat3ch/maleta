@@ -13,7 +13,7 @@ dep_update_dropbox <- function(dep_filepath = file.path("data", paste0("deps_",p
   remote <- rdrop2::drop_exists(dep_filepath)
 
   file_exists <- c(local = file.exists(dep_filepath), remote = remote)
-  if (!all(file_exists))
+  if (!any(file_exists))
     UU::gbort("{.path {dep_filepath}} does not exist locally or remotely.")
 
   if (file_exists["local"]) {

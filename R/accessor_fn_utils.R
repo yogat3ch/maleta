@@ -38,11 +38,11 @@ create_accessors <- function(dep_dir = "data", deps = NULL, dep_update = dep_upd
   if (is.null(deps))
     deps <- clean_null(UU::list.files2(dep_dir)) |>
       stringr::str_subset("\\.png^", negate = TRUE)
-
+  deps <- fs::path_abs(deps)
   UU::mkpath(dep_dir)
   if (update_all)
     purrr::walk(deps, dep_update)
-  accessor_funs <- purrr::map(UU::list.files2(path), accessor_create)
+  accessor_funs <- purrr::map(rlang::set_names(deps, fs::path_ext_remove(basename(deps))), accessor_create)
   do_assignment(accessor_funs)
 }
 

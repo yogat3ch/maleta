@@ -1,10 +1,12 @@
 Package: maleta
 Title: maleta (suitcase): for 'carrying' app dependencies
 Version: 0.0.0.9000
-Authors@R: person("Stephen", "Holsenbeck", , "sholsen@alumni.emory.edu", role = c("cre",
-          "aut"))
-Description: An open-source Shiny app dependency management package
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
+Authors@R: person("Stephen", "Holsenbeck", ,
+       "sholsen@alumni.emory.edu", role = c("cre", "aut"))
+Description: An open-source Shiny app dependency management
+       package
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+       pick a license
 URL: https://github.com/yogat3ch/maleta
 BugReports: https://github.com/yogat3ch/maleta/issues
 Depends: R (>= 4.1.0)
@@ -12,6 +14,6 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Imports: dplyr, fs, lubridate, pkgload, purrr, rlang, stringr, UU
+Imports: base, cli, fs, pkgload, purrr, rdrop2, rlang, stringr, UU
 Remotes: yogat3ch/UU, yogat3ch/rdrop2
 Suggests: rdrop2, testthat (>= 3.0.0)

@@ -36,15 +36,16 @@ do_assignment <- function(funs, ns = pkgload::pkg_name()) {
 #' @export
 
 
-create_accessors <- function(dep_dir = "data", deps = NULL, dep_update = dep_update_fn(fn = dep_update_dropbox), update_all = TRUE) {
+create_accessors <- function(dep_dir = "data", deps = NULL, dep_update = dep_update_dropbox, update_all = TRUE) {
   if (is.null(deps))
     deps <- clean_null(UU::list.files2(dep_dir)) |>
       stringr::str_subset("\\.png^", negate = TRUE)
   deps <- fs::path_abs(deps)
   UU::mkpath(dep_dir)
   if (update_all)
-    purrr::walk(deps, dep_update)
-  accessor_funs <- purrr::map(rlang::set_names(deps, fs::path_ext_remove(basename(deps))), accessor_create)
+    dep_update(deps)
+
+  accessor_funs <- purrr::map(rlang::set_names(deps, fs::path_ext_remove(basename(deps))), accessor_create, do_update = !update_all)
   do_assignment(accessor_funs)
 }
 

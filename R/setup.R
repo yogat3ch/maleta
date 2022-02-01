@@ -8,7 +8,7 @@
 #' @return success message if a value is written
 #' @export
 #'
-#' @examples
+
 creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FALSE) {
   fp <- switch(UU::match_letters(scope, "user", "project"),
          user = "~/.Renviron",

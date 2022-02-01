@@ -7,7 +7,7 @@
 create_accessors(
   dep_dir = "data",
   deps = NULL,
-  dep_update = dep_update_fn(fn = dep_update_dropbox),
+  dep_update = dep_update_dropbox,
   update_all = TRUE
 )
 }

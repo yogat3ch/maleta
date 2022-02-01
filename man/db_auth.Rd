@@ -4,7 +4,9 @@
 \alias{db_auth}
 \title{Authorize Dropbox}
 \usage{
-db_auth(db_token = file.path("inst", "vault", "db_token.rds"))
+db_auth(
+  db_token = file.path(pkgload::pkg_path(), "inst", "vault", "db_token.rds")
+)
 }
 \arguments{
 \item{db_token}{\code{(character)} path to Dropbox token saved as RDS}

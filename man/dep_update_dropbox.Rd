@@ -5,16 +5,15 @@
 \title{Update a dependency saved in Dropbox (if it's older)}
 \usage{
 dep_update_dropbox(
-  dep_filepath = file.path("data", paste0("deps_", pkgload::pkg_name(), ".rds")),
-  dest_dir = "data"
+  local_filepaths = readRDS(file.path("data", paste0("deps_", pkgload::pkg_name(),
+    ".rds"))),
+  remote_dir = NULL
 )
 }
 \arguments{
-\item{dep_filepath}{\code{(chr)} of the filepath}
+\item{local_filepaths}{\code{(chr)} of the filepath(s)}
 
-\item{dest_local_dir}{\code{(dest_dir)} directory where the downloaded file will be saved.}
-
-\item{dest_remote_dir}{\code{(dest_dir)} directory on the remote server where \code{dep_filepath} is saved. The location will be transformed as follows: \code{\link[base]{file.path}(dest_remote_dir, \link[base]{basename}(dep_filepath)}}
+\item{remote_dir}{\code{(chr)} directory on the remote server where \code{local_filepath} is saved. The location will be transformed as follows: \code{\link[base]{file.path}(dest_remote_dir, \link[base]{basename}(dep_filepath)}}
 }
 \value{
 dep_filepath contents

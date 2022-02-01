@@ -1,11 +1,13 @@
-accessor_create <- function(.x) rlang::new_function(args =
+accessor_create <- function(.x, do_update) rlang::new_function(args =
                       rlang::pairlist2(
                         path = rlang::expr(!!.x),
-                        dep_update = dep_update_fn(fn = dep_update_dropbox),
+                        dep_update = update_dropbox,
+                        do_update = rlang::expr(!!do_update),
                         ... = ,
                       ),
                     body = base::quote({
-                      dep_update(path)
+                      if (do_update)
+                        dep_update(path)
                       UU::file_fn(path)(path, ...)
                     }))
 

@@ -11,7 +11,7 @@
 
 creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FALSE) {
   fp <- switch(UU::match_letters(scope, "user", "project"),
-         user = "~/.Renviron",
+         user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
          project = ".Renviron")
   UU::mkpath(fp)
   l <- ol <- readLines(fp)

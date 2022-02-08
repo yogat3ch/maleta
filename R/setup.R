@@ -10,29 +10,43 @@
 #'
 
 creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FALSE) {
-  fp <- switch(UU::match_letters(scope, "user", "project"),
+  .scope <- UU::match_letters(scope, "user", "project")
+  fp <- switch(.scope,
          user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
          project = ".Renviron")
-  UU::mkpath(fp)
-  l <- ol <- readLines(fp)
+  UU::mkpath(fp, mkfile = TRUE)
+  l <- readLines(fp)
   l <- l[nzchar(l)]
   creds <- rlang::dots_list(..., .named = TRUE)
+  creds_to_write <- need_write(creds, l, overwrite)
 
-  purrr::iwalk(creds, ~{
-    cred_exists <- grepl(paste0("^",.y), l)
-    if (!any(cred_exists) || overwrite) {
-      if (any(cred_exists))
-        l <- l[!cred_exists]
-      l <<- c(l, paste0(.y, " = '", .x,"'"))
-    }
-  })
-  write(l, fp)
-  readRenviron(fp)
-  .written <- trimws(stringr::str_extract(setdiff(l, ol), "^[^\\=]+"))
-  if (length(.written))
-    cli::cli_alert_success("{cli::col_green(paste0(.written, collapse = \", \"))} successfully written to {.path {fp}}")
+  if (length(creds_to_write)) {
+    write(paste0(names(creds_to_write), " = '", creds_to_write,"'"), fp, append = TRUE)
+    readRenviron(fp)
+    cli::cli_alert_success("{cli::col_green(paste0(names(creds_to_write), collapse = \", \"))} successfully written to {.path {fp}}")
+  }
+  if (.scope == "project") {
+    UU::mkpath(".gitignore", mkfile = TRUE)
+    to_ignore <- need_write(".Renviron", readLines(".gitignore"))
+    write(to_ignore, file = ".gitignore", append = TRUE)
+    if (UU::is_legit(to_ignore))
+      cli::cli_alert_info("{.path {'.Renviron'}} added to {.val {'.gitignore'}}")
+  }
+
 }
 
 setup_dropbox <- function(key, secret) {
   creds_to_renviron(DROPBOX_KEY = key, DROPBOX_SECRET = secret)
+}
+
+need_write <- function(creds, file_lines, overwrite = FALSE) {
+  if (is.null(names(creds)))
+    creds <- rlang::set_names(creds)
+  creds[purrr::imap_lgl(creds, ~{
+    cred_exists <- grepl(paste0("^",.y), file_lines, fixed = TRUE)
+    if (!any(cred_exists) || overwrite)
+      TRUE
+    else
+      FALSE
+  })]
 }

@@ -27,11 +27,27 @@ creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FAL
   }
   if (.scope == "project") {
     UU::mkpath(".gitignore", mkfile = TRUE)
-    to_ignore <- need_write(".Renviron", readLines(".gitignore"))
-    write(to_ignore, file = ".gitignore", append = TRUE)
-    if (UU::is_legit(to_ignore))
-      cli::cli_alert_info("{.path {'.Renviron'}} added to {.val {'.gitignore'}}")
+    ignore_files(".Renviron")
   }
+
+}
+
+#' Add lines to _.gitignore_
+#'
+#' @param lines \code{chr}
+#' @param directory \code{(chr)} directory path of _.gitignore_ to be modified
+#'
+#' @return \code{informative messages}
+#' @export
+
+ignore_files <- function(lines, directory = ".") {
+  fp <- file.path(directory, ".gitignore")
+  UU::mkpath(fp, mkfile = TRUE)
+  l <- readLines(fp)
+  to_ignore <- need_write(lines, l)
+  write(to_ignore, file = fp, append = TRUE)
+  if (UU::is_legit(to_ignore))
+    cli::cli_alert_info("{.path {paste0(files, collapse = ',')}} added to {.val {'.gitignore'}}")
 
 }
 
@@ -43,7 +59,7 @@ need_write <- function(creds, file_lines, overwrite = FALSE) {
   if (is.null(names(creds)))
     creds <- rlang::set_names(creds)
   creds[purrr::imap_lgl(creds, ~{
-    cred_exists <- grepl(paste0("^",.y), file_lines, fixed = TRUE)
+    cred_exists <- grepl(paste0("^",.y), file_lines)
     if (!any(cred_exists) || overwrite)
       TRUE
     else

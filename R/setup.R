@@ -1,6 +1,6 @@
 
 #' Write named credentials to .Renviron file
-#'
+#' @description Writes key pairs to .Renviron and adds .Renviron to _.gitignore_ if not already there.
 #' @param ... named keys to write
 #' @inheritParams usethis::edit_r_environ
 #' @param overwrite \code{(lgl)} should an existing key be overwritten. **Default: `FALSE`**

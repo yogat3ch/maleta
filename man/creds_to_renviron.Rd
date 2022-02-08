@@ -18,5 +18,5 @@ current \strong{project}}
 success message if a value is written
 }
 \description{
-Write named credentials to .Renviron file
+Writes key pairs to .Renviron and adds .Renviron to \emph{.gitignore} if not already there.
 }
